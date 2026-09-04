@@ -1,6 +1,7 @@
 #include "app_info.h"
 #include "image_loader.h"
 #include<iostream>
+#include<image_preprocessor.h>
 int main(int argc, char* argv[])
 {
     if (argc < 2)
@@ -20,9 +21,21 @@ int main(int argc, char* argv[])
     }
 
     std::cout << "\nImage loaded successfully." << std::endl;
+    std::cout << "\nOriginal:\n";
     std::cout << "Width: " << image.cols << std::endl;
     std::cout << "Height: " << image.rows << std::endl;
     std::cout << "Channels: " << image.channels() << std::endl;
 
+    const int targetWidth = 320;
+    const int targetHeight = 192;
+    cv::Mat processedImage = preprocessImage(
+        image,
+        targetWidth,
+        targetHeight
+    );
+    std::cout << "\nPreprocessed:\n";
+    std::cout << "Width: " << processedImage.cols<< '\n';
+    std::cout << "Height: " << processedImage.rows<< '\n';
+    std::cout << "Channels: " << processedImage. channels()<< '\n';
     return 0;
 }

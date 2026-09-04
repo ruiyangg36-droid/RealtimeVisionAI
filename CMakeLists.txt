@@ -8,7 +8,11 @@ add_executable(
 	src/main.cpp
  src/app_info.cpp
  include/app_info.h
- "include/image_loader.h" "src/image_loader.cpp")
+ "include/image_loader.h" 
+ "src/image_loader.cpp" 
+ "include/image_preprocessor.h" 
+ "src/image_preprocessor.cpp"
+)
  target_include_directories(p1_app PRIVATE ${OpenCV_INCLUDE_DIRS})
  target_include_directories(
     p1_app
