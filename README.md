@@ -15,4 +15,4 @@ PyTorch 模型训练/使用
 C++17 + Qt6 + OpenCV + PyTorch + ONNX Runtime + CMake + Git + Linux
 
 ## 当前状态
-支持使用 OpenCV 读取本地图像并获取基本图像信息,并修改图片尺寸
+图像预处理支持 resize、BGR→RGB、float32 转换与 0~1 像素缩放,HWC.
