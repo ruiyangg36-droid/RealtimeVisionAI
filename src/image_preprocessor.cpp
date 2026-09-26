@@ -1,21 +1,21 @@
-#include "image_preprocessor.h"
+ï»¿#include "image_preprocessor.h"
 #include<opencv2/imgproc.hpp>
 cv::Mat preprocessImage(
-	const cv::Mat& image,//³£Á¿ÒıÓÃ´«µİ£¬¹¤³ÌÖĞÕâÑù´«µİ¿É±ÜÃâ²»±ØÒªµÄ²ÎÊı¶ÔÏó¸´ÖÆ£¬±£Ö¤º¯Êı²»»áĞŞ¸ÄÍ¼Ïñ
+	const cv::Mat& image,//å¸¸é‡å¼•ç”¨ä¼ é€’ï¼Œå·¥ç¨‹ä¸­è¿™æ ·ä¼ é€’å¯é¿å…ä¸å¿…è¦çš„å‚æ•°å¯¹è±¡å¤åˆ¶ï¼Œä¿è¯å‡½æ•°ä¸ä¼šä¿®æ”¹å›¾åƒ
 	int targetWidth,
 	int targetHeight
 ) {
 	cv::Mat resizedImage;
 	cv::resize(
-		image,//ÊäÈëÍ¼Ïñ
-		resizedImage,//Êä³öÍ¼Ïñ
-		cv::Size(targetWidth, targetHeight)//Ä¿±ê³ß´ç
+		image,//è¾“å…¥å›¾åƒ
+		resizedImage,//è¾“å‡ºå›¾åƒ
+		cv::Size(targetWidth, targetHeight)//ç›®æ ‡å°ºå¯¸
 	);
 	cv::Mat rgbImage;
 	cv::cvtColor(
-		resizedImage,//ÊäÈëÍ¼Ïñ
-		rgbImage,//Êä³öÍ¼Ïñ
-		cv::COLOR_BGR2RGB//×ª»»·½Ê½ BGR±ä³ÉRGB£¬Éî¶ÈÑ§Ï°Ä£ĞÍ³£¼ûÍ¼Ïñ´¦ÀíÁ÷³Ì°´RGB
+		resizedImage,//è¾“å…¥å›¾åƒ
+		rgbImage,//è¾“å‡ºå›¾åƒ
+		cv::COLOR_BGR2RGB//è½¬æ¢æ–¹å¼ BGRå˜æˆRGBï¼Œæ·±åº¦å­¦ä¹ æ¨¡å‹å¸¸è§å›¾åƒå¤„ç†æµç¨‹æŒ‰RGB
 	);
 	cv::Mat floatImage;
 	rgbImage.convertTo(
@@ -23,7 +23,7 @@ cv::Mat preprocessImage(
 		CV_32F,
 		1.0 / 255.0
 	);
-	//¹éÒ»»¯£¬ÎªºóÃæpytorch´ò»ù´¡
+	//å½’ä¸€åŒ–ï¼Œä¸ºåé¢pytorchæ‰“åŸºç¡€
 	return floatImage;
 }
 std::vector<float> convertHWCToCHW(const cv::Mat& image)

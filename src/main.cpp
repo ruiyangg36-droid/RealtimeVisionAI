@@ -1,18 +1,18 @@
-#include "app_info.h"
+ï»¿#include "app_info.h"
 #include "image_loader.h"
 #include<iostream>
 #include<image_preprocessor.h>
 #include<vector>
 int main(int argc, char* argv[])
 {
-    //ÅĞ¶ÏÃüÁîĞĞÊäÈëÊÇ·ñÕıÈ·
+    //åˆ¤æ–­å‘½ä»¤è¡Œè¾“å…¥æ˜¯å¦æ­£ç¡®
     if (argc < 2)
     {
         std::cout << "Usage: p1_app <image_path>" << std::endl;
         return 1;
     }
     printAppInfo(1);
-    //ÅĞ¶ÏÍ¼Æ¬ÊÇ·ñÕæÕıÊäÈë
+    //åˆ¤æ–­å›¾ç‰‡æ˜¯å¦çœŸæ­£è¾“å…¥
     std::string imagePath = argv[1];
 
     cv::Mat image = loadImage(imagePath);
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     std::cout << "Width: " << image.cols << std::endl;
     std::cout << "Height: " << image.rows << std::endl;
     std::cout << "Channels: " << image.channels() << std::endl;
-    //ĞŞ¸Ä³ÉÄ¿±ê³ß´ç->BGR×ª»»³ÉRGB->ÏñËØÖµ×ª³É¸¡µãĞÍ->ÏñËØÖµËõĞ¡
+    //ä¿®æ”¹æˆç›®æ ‡å°ºå¯¸->BGRè½¬æ¢æˆRGB->åƒç´ å€¼è½¬æˆæµ®ç‚¹å‹->åƒç´ å€¼ç¼©å°
     const int targetWidth = 320;
     const int targetHeight = 192;
     cv::Mat processedImage = preprocessImage(
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     std::cout << "Float32: " << (processedImage.depth() == CV_32F?"yes" : "no") << '\n';
     cv::Vec3f pixel = processedImage.at<cv::Vec3f>(0, 0);
     std::cout << "\nPixel(0,0): " << pixel[0] << " " << pixel[1] << " " << pixel[2] << '\n';
-    //°ÑÍ¼Æ¬Ä¬ÈÏµÄHWC£¨¸ß¶È£¬¿í¶È£¬Í¨µÀÊı£©×ª»»³ÉCHW ²¢ÑéÖ¤
+    //æŠŠå›¾ç‰‡é»˜è®¤çš„HWCï¼ˆé«˜åº¦ï¼Œå®½åº¦ï¼Œé€šé“æ•°ï¼‰è½¬æ¢æˆCHW å¹¶éªŒè¯
     std::vector<float> inputData = convertHWCToCHW(processedImage);
     int H = processedImage.rows;
     int W = processedImage.cols;

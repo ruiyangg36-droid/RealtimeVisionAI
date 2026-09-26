@@ -1,2 +1,2 @@
-#pragma once
+﻿#pragma once
 void  printAppInfo(int a);

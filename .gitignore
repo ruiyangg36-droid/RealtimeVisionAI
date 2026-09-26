@@ -3,3 +3,4 @@ build/
 out/
 *.user
 *.suo
+models/*.onnx
