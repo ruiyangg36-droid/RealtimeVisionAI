@@ -1,58 +1,94 @@
 ﻿#include "app_info.h"
 #include "image_loader.h"
-#include<iostream>
-#include<image_preprocessor.h>
-#include<vector>
+#include "image_preprocessor.h"
+#include <iostream>
+#include <vector>
 int main(int argc, char* argv[])
 {
-    //判断命令行输入是否正确
+    // 判断命令行输入是否正确
     if (argc < 2)
     {
         std::cout << "Usage: p1_app <image_path>" << std::endl;
         return 1;
     }
     printAppInfo(1);
-    //判断图片是否真正输入
+    // 获取图片路径
     std::string imagePath = argv[1];
-
     cv::Mat image = loadImage(imagePath);
-
+    // 判断图片是否真正加载成功
     if (image.empty())
     {
         std::cerr << "Failed to load image." << std::endl;
         return 1;
     }
-
     std::cout << "\nImage loaded successfully." << std::endl;
     std::cout << "\nOriginal:\n";
-    std::cout << "Width: " << image.cols << std::endl;
-    std::cout << "Height: " << image.rows << std::endl;
-    std::cout << "Channels: " << image.channels() << std::endl;
-    //修改成目标尺寸->BGR转换成RGB->像素值转成浮点型->像素值缩小
-    const int targetWidth = 320;
-    const int targetHeight = 192;
+    std::cout << "Width: " << image.cols << '\n';
+    std::cout << "Height: " << image.rows << '\n';
+    std::cout << "Channels: " << image.channels() << '\n';
+
+    // ResNet18 预处理参数
+    const int resizeShortSide = 256;
+    const int cropSize = 224;
+
+    // 保持宽高比 resize
+    // -> Center Crop
+    // -> BGR 转 RGB
+    // -> 转为 Float32
+    // -> 缩放到 [0,1]
+    // -> mean/std 标准化
     cv::Mat processedImage = preprocessImage(
         image,
-        targetWidth,
-        targetHeight
+        resizeShortSide,
+        cropSize
     );
+
+    // 验证预处理后的图像信息
     std::cout << "\nPreprocessed:\n";
-    std::cout << "Width: " << processedImage.cols<< '\n';
-    std::cout << "Height: " << processedImage.rows<< '\n';
-    std::cout << "Channels: " << processedImage. channels()<< '\n';
-    std::cout << "Float32: " << (processedImage.depth() == CV_32F?"yes" : "no") << '\n';
+    std::cout << "Width: " << processedImage.cols << '\n';
+    std::cout << "Height: " << processedImage.rows << '\n';
+    std::cout << "Channels: " << processedImage.channels() << '\n';
+    std::cout << "Float32: "
+              << (processedImage.depth() == CV_32F ? "yes" : "no")
+              << '\n';
+
+    // mean/std 标准化后像素值不再限制在 [0,1]
     cv::Vec3f pixel = processedImage.at<cv::Vec3f>(0, 0);
-    std::cout << "\nPixel(0,0): " << pixel[0] << " " << pixel[1] << " " << pixel[2] << '\n';
-    //把图片默认的HWC（高度，宽度，通道数）转换成CHW 并验证
-    std::vector<float> inputData = convertHWCToCHW(processedImage);
+
+    std::cout << "\nNormalized Pixel(0,0):\n";
+    std::cout << "R = " << pixel[0] << '\n';
+    std::cout << "G = " << pixel[1] << '\n';
+    std::cout << "B = " << pixel[2] << '\n';
+
+    // HWC -> CHW
+    std::vector<float> inputData =
+        convertHWCToCHW(processedImage);
+
     int H = processedImage.rows;
     int W = processedImage.cols;
-    std::cout << "CHW data size: " << inputData.size() << "\n";
-    cv::Vec3f firstPixel = processedImage.at<cv::Vec3f>(0, 0);
-    std::cout << "HWC Pixel(0,0): R = " << firstPixel[0] 
-        << ", G = " << firstPixel[1] << ", B = " << firstPixel[2] << "\n";
-    std::cout << "CHW first R: " << inputData[0] << "\n";
-    std::cout << "CHW first G: " << inputData[H * W] << "\n";
-    std::cout << "CHW first B: " << inputData[2 * H * W] << "\n";
+
+    std::cout << "\nCHW data size: "
+              << inputData.size()
+              << '\n';
+
+    // 验证 HWC -> CHW 转换是否正确
+    cv::Vec3f firstPixel =
+        processedImage.at<cv::Vec3f>(0, 0);
+
+    std::cout << "\nHWC Pixel(0,0): "
+              << "R = " << firstPixel[0]
+              << ", G = " << firstPixel[1]
+              << ", B = " << firstPixel[2]
+              << '\n';
+
+    std::cout << "CHW first R: "
+              << inputData[0] << '\n';
+
+    std::cout << "CHW first G: "
+              << inputData[H * W] << '\n';
+
+    std::cout << "CHW first B: "
+              << inputData[2 * H * W] << '\n';
+
     return 0;
 }

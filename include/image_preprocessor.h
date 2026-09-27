@@ -3,8 +3,8 @@
 #include<vector>
 cv::Mat preprocessImage(
 	const cv::Mat& image,
-	int targetWidth,
-	int targetHeight
+	int resizeShortSide,
+	int cropSize
 );
 std::vector<float> convertHWCToCHW(
 	const cv::Mat& image
